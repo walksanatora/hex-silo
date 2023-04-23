@@ -10,29 +10,7 @@ const macroRegex = /#define (.+) \(([\w]+) ([qawed]+)\)/g
 const whiteSpace = /^[\s]+/
 
 const macroReg = {}
-
-function gen_num(num) {
-    num = Math.floor(num);
-    let pattern = "";
-    let base = num < 0 ? "dedd" : "aqaa";
-    num = Math.abs(num);
-    while (num > 0) {
-      if (num % 2 === 0) {
-        num = num / 2;
-        pattern += "a";
-      } else if (num > 5) {
-        num -= 5
-        pattern += "q"
-      } else {
-        num -= 1;
-        pattern += "w";
-      }
-    }
-    pattern = pattern.split("").reverse().join("");
-    return base + pattern;
-  }
   
-
 function getPatternFromName(line) {
     trim = line.trim()
     if (trim in registry) { //normal line...
@@ -88,6 +66,8 @@ function getPatternFromName(line) {
         }
     
         return { startDir: direction, angles: pattern }
+    } else if (trim == "{" || trim == "}") {
+        return getPatternFromName(trim=="{"?"Introspection":"Retrospection")
     }
 }
 

@@ -1,0 +1,77 @@
+//wisp pattern list
+{
+    Numerical Reflection: 1
+    Haste
+    //reset wisp stack
+    Flock's Reflection
+    Flock's Gambit
+    Bookkeeper's Gambit: v
+    //raycast downwards, if result is null or further than one block away, conjure a block below wisp
+    Identity Reflection
+    Compass' Purification
+    Gemini Decomposition
+    Vector Reflection -Y
+    Archer's Distillation
+    Gemini Decomposition
+    Augur's Purification
+    {
+        Subtractive Distillation
+        Length Purification
+        Numerical Reflection: 1
+        Maximus Distillation
+    }
+    //if false, return true
+    {
+        True Reflection
+    }
+    Flock's Disintegration
+    Augur's Exaltation
+    Hermes' Gambit
+    //if true, conjure block below wisp
+    {
+        Identity Reflection
+        Compass' Purification
+        Vector Reflection -Y
+        Additive Distillation
+        Conjure Block
+    }
+    //if false, do nothing
+    Vacant Reflection
+    Augur's Exaltation
+    Hermes' Gambit
+    //move further along path
+    Identity Reflection
+    Compass' Purification
+    {
+        //placeholder for embedding axial vector
+        Bookkeeper's Gambit: -
+    }
+    Flock's Disintegration
+    Additive Distillation
+    Pathfinder's Gambit
+    Wander
+}
+//swap placeholder with axial vector
+Gemini Decomposition
+{
+    Bookkeeper's Gambit: -
+}
+Flock's Disintegration
+Locator's Distillation
+Mind's Reflection
+Alidade's Purification
+Axial Purification
+Surgeon's Exaltation
+//summon wisp
+Mind's Reflection
+Compass' Purification II
+Vector Reflection +Y
+Numerical Reflection: 2
+Division Distillation
+Additive Distillation
+Mind's Reflection
+Alidade's Purification
+Axial Purification
+Additive Distillation
+Numerical Reflection: 20
+Summon Cyclic Wisp
