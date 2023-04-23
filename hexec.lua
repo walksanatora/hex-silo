@@ -37,4 +37,10 @@ end
 local file = ...
 if file == nil then error("Argument expected: file path") end
 
-print(textutils.pagedTabulate(executeHex(...)))
+term.clear()
+term.setCursorPos(1,1)
+textutils.pagedPrint(
+    textutils.serialise(
+        executeHex(...)
+    )
+)
