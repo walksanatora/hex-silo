@@ -1,3 +1,2 @@
-main.bbcode
-out.json
+*.json
 data/*
