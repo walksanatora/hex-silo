@@ -58,7 +58,7 @@ function parseIotaData(iota) {
         return iotav
     } catch (SyntaxError) {
         if (/^\[.*\]$/.test(iota)) {
-            return [parseList(iota).map(i => parseIotaData(i))]
+            return parseList(iota).map(i => parseIotaData(i))
         } else if (iota.match(/([1234567890\.]+),([1234567890\.]+),([1234567890\.]+)/)) { //vector constant
             match = iota.match(/([1234567890\.]+),([1234567890\.]+),([1234567890\.]+)/)
             return { x: parseFloat(match[1]), y: parseFloat(match[2]), z: parseFloat(match[3]) }
