@@ -67,12 +67,7 @@ function getPatternFromName(line, depth) {
         return [macroReg[trim], false]
     } else if (trim.startsWith("Consideration: ")) {
         var gpfn = getPatternFromName(trim.replace(/^Consideration: /, ''), depth)
-        const repeatedArr = Array(2 ** depth).fill(registry["Consideration"]);
-        const resultArr = [
-            ...repeatedArr,
-            gpfn[0]
-        ]
-        return [resultArr.flat(1), false, 0]
+        return [[registry["Consideration"], resultArr], false, 0]
     } else if (trim.startsWith("Numerical Reflection: ")) {
         let num = trim.replace(/^Numerical Reflection: /, '')
         return [[
