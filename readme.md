@@ -14,8 +14,14 @@ note: currently parsehex messes with number patterns (by doing a intro/retro/flo
 so if you are indexing into your source code... it may get a bit messy<br>
 <br><br>
 notes about hexpattern format<br>
-<Iota\>: direct insertion, no escape<br>
-<{Iota}>: embed with intro/retro/flock<br>
-<\Iota>: embed with consideration(s)<br>
-<<Iota\>>: embed with intro or considerations, whichever is shorter<br>
-currently you can use json for iotas thatdont have a pre-handled parser
+* `<Iota>`: direct insertion, no escape<br>
+* `<{Iota}>`: embed with intro/retro/flock<br>
+* `<\Iota>`: embed with consideration(s)<br>
+* `<<Iota>>`: embed with intro or considerations, whichever is shorter<br>
+
+currently you can use json for iotas thatdont have a pre-handled parser<br>
+current types that can be parsed<br>
+* Numbers (decimal and not)
+* Strings ("quoted strings")
+* Booleans (`true`/`false` (case sensitive))
+* Vector3 (`(x,y,z)` format)
