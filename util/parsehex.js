@@ -25,7 +25,6 @@ function parseIotaData(iota) {
 function parseIotaMethod(iota, depth) {
     if (iota.match(/<<([^>]+)>>/)) {
         const iotad = iota.match(/<([^\s>]+)>/)[1]
-        console.log(depth)
         if (depth >= 2) {//consideration is *bad*
             return [
                 registry["Introspection"],
@@ -96,7 +95,6 @@ function getPatternFromName(line, depth) {
         for (let i = 0; i < mask.length - 1; i++) {
             const previous = mask[i];
             const current = mask[i + 1];
-            console.log(pattern, mask)
             switch (previous + current) {
                 case "--":
                     pattern += "w";
@@ -140,6 +138,7 @@ function parseHexpatternFile(hexpatternFilePath) {
     var output = []
     var depth = 0
     for (let i = 0; i < content.length; i++) {
+        if (content[i].trim() === "") { continue }
         var ret = getPatternFromName(content[i], depth)
         if (ret == undefined) { console.warn("Failed to parse pattern: " + content[i]); continue }
         if (!ret[1]) {
@@ -152,7 +151,6 @@ function parseHexpatternFile(hexpatternFilePath) {
         } else {
             output.push(ret[0])
         }
-        console.log(depth)
         depth += ret[2] ?? 0
 
     }
