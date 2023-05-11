@@ -11,7 +11,7 @@ shell.setCompletionFunction(shell.getRunningProgram(), completion.build(
 
 local function executeHex(hex)
     fp.writeIota(nil)
-    redstone.setAnalogOutput(write, 15)
+    redstone.setOutput(write, true)
     local code
     if type(hex) == "string" then
         if not fs.exists(hex) then error("File path is invalid, does not exist") end
@@ -29,7 +29,7 @@ local function executeHex(hex)
     fp.writeIota(code)
     local c = 0
     while redstone.getInput(read) do sleep(1) end
-    redstone.setAnalogOutput(write, 0)
+    redstone.setOutput(write, false)
     return fp.readIota()
 end
 
