@@ -1,10 +1,10 @@
 --main lua program for controlling execution
 
 --hard coded things
-local read = "top"
-local write = "back"
+local read = "front"
+local write = "top"
 local append = textutils.unserializeJSON(
-    '[{"angles":"qwaeawqaeaqa","startDir":"NORTH_WEST"},{"angles":"ewdqdwe","startDir":"SOUTH_WEST"},{"angles":"eaqwqae","startDir":"SOUTH_WEST"},{"angles":"qqqqqea","startDir":"NORTH_WEST"},{"angles":"waaw","startDir":"NORTH_EAST"},{"angles":"wdwewewewewew","startDir":"EAST"}]'
+    '[{"angles":"qwaeawqaeaqa","startDir":"NORTH_WEST"},{"angles":"ewdqdwe","startDir":"SOUTH_WEST"},{"angles":"eaqwqae","startDir":"SOUTH_WEST"},{"angles":"eeeeeqd","startDir":"SOUTH_WEST"},{"angles":"waaw","startDir":"NORTH_EAST"},{"angles":"qqqqqdaqa","startDir":"SOUTH_EAST"},{"angles":"aawdd","startDir":"EAST"},{"angles":"wdwewewewewew","startDir":"EAST"}]'
 )
 
 
@@ -16,12 +16,13 @@ shell.setCompletionFunction(shell.getRunningProgram(), completion.build(
 ))
 
 
-
+--[[
+    takes a file path or a table and hexcasting executes it and waits for output
+    if get_output is true then it will return the output of the hex
+    if get_output is false then it will return the hex executed
+]]
 local function executeHex(hex, get_output)
     fp.writeIota(nil)
-    redstone.setOutput(write, true)
-    sleep(1)
-    redstone.setOutput(write, false)
     local code
     -- get code from file
     if type(hex) == "string" then
@@ -47,19 +48,22 @@ local function executeHex(hex, get_output)
     end
 
     fp.writeIota(code)
-    local c = 0
+    print("start circle")
+    redstone.setOutput(write, true)
+    sleep(1)
+    redstone.setOutput(write, false)
     print("await completion")
-    while redstone.getInput(read) do sleep(1) end
-    if get_output then return fp.readIota() end
+    while redstone.getInput(read) do sleep(.1) end
+    return fp.readIota()
 end
 
 local file = ...
 if file == nil then error("Argument expected: file path") end
 
---term.clear()
---term.setCursorPos(1, 1)
---textutils.pagedPrint(
---textutils.serialise(
-executeHex(file, true)
---)
---)
+term.clear()
+term.setCursorPos(1, 1)
+textutils.pagedPrint(
+    textutils.serialise(
+        executeHex(file, true)
+    )
+)

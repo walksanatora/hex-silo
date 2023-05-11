@@ -1,8 +1,11 @@
-// this is compiled into json and then sent into the hexec lua script to append to every spell
+// this is compiled into json and put as a constant in hexec
+// this is used to retrive the stack after execution
 
-Flock's Reflection
-Flock's Gambit
-Waystone Reflection
-Vector Reflection +X //replace with focal port offset
-Additive Distillation
-Chronicler's Gambit
+Flock's Reflection // turn the stack into a single iota
+Flock's Gambit     // ...
+Waystone Reflection  // replace with focal port offset
+Vector Reflection -Z //
+Additive Distillation//
+Entity Purification// turn location into entity (hopefully the focal port)
+Jester's Gambit
+Chronicler's Gambit// write

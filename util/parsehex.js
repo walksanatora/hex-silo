@@ -20,7 +20,7 @@ function getPatternFromName(line) {
     } else if (trim.startsWith("Consideration: ")) {
         return [[
             registry["Consideration"],
-            getPatternFromName(trim.replace(/^Consideration: /, ''))
+            getPatternFromName(trim.replace(/^Consideration: /, '')[0])
         ], false]
     } else if (trim.startsWith("Numerical Reflection: ")) {
         let num = trim.replace(/^Numerical Reflection: /, '')
