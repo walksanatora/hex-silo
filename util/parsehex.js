@@ -11,25 +11,77 @@ const whiteSpace = /^[\s]+/
 
 const macroReg = {}
 
-function getPatternFromName(line) {
+function parseIotaData(iota) {
+    try {
+        return JSON.parse(iota)
+    } catch (SyntaxError) {
+        if (iota.match(/([1234567890\.]+),([1234567890\.]+),([1234567890\.]+)/)) { //vector constant
+            match = iota.match(/([1234567890\.]+),([1234567890\.]+),([1234567890\.]+)/)
+            return { x: parseFloat(match[1]), y: parseFloat(match[2]), z: parseFloat(match[3]) }
+        }
+    }
+}
+
+function parseIotaMethod(iota, depth) {
+    if (iota.match(/<<([^>]+)>>/)) {
+        const iotad = iota.match(/<([^\s>]+)>/)[1]
+        console.log(depth)
+        if (depth >= 2) {//consideration is *bad*
+            return [
+                registry["Introspection"],
+                parseIotaData(iotad),
+                registry["Retrospection"],
+                registry["Flock's Gambit"],
+            ]
+        } else {
+            const repeatedArr = Array(2 ** depth).fill(registry["Consideration"]);
+            const resultArr = [
+                ...repeatedArr,
+                parseIotaData(iotad)
+            ]
+            return resultArr
+        }
+    } else if (iota.match(/<{([^>]+?)}>/)) {
+        return [
+            registry["Introspection"],
+            parseIotaData(iota.match(/<{([^>]+?)}>/)[1]),
+            registry["Retrospection"],
+            registry["Flock's Gambit"],
+        ]
+    } else if (iota.match(/<\\([^>]+)>/)) {
+        const repeatedArr = Array(2 ** depth).fill(registry["Consideration"]);
+        const resultArr = [
+            ...repeatedArr,
+            parseIotaData(iota.match(/<\\([^>]+)>/)[1])
+        ]
+        return resultArr
+    } else {
+        return [parseIotaData(iota.match(/<([^>]+)>/)[1])]
+    }
+}
+
+function getPatternFromName(line, depth) {
     trim = line.trim()
     if (trim in registry) { //normal line...
         return [registry[trim], false]
     } else if (trim in macroReg) { //macro line
         return [macroReg[trim], false]
     } else if (trim.startsWith("Consideration: ")) {
-        return [[
-            registry["Consideration"],
-            getPatternFromName(trim.replace(/^Consideration: /, '')[0])
-        ], false]
+        var gpfn = getPatternFromName(trim.replace(/^Consideration: /, ''), depth)
+        const repeatedArr = Array(2 ** depth).fill(registry["Consideration"]);
+        const resultArr = [
+            ...repeatedArr,
+            gpfn[0]
+        ]
+        return [resultArr.flat(1), false, 0]
     } else if (trim.startsWith("Numerical Reflection: ")) {
         let num = trim.replace(/^Numerical Reflection: /, '')
-        return [
+        return [[
             registry["Introspection"],
             parseFloat(num),
             registry["Retrospection"],
             registry["Flock's Disintegration"]
-        ]
+        ], false, 0]
     } else if (trim.startsWith("Bookkeeper's Gambit: ")) {
         const mask = trim.replace(/^Bookkeeper's Gambit: /, '')
         var direction, pattern
@@ -63,10 +115,9 @@ function getPatternFromName(line) {
 
         return [{ startDir: direction, angles: pattern }, false]
     } else if (trim == "{" || trim == "}") {
-        return getPatternFromName(trim == "{" ? "Introspection" : "Retrospection")
-    } else if (trim.startsWith("@")) {
-        json_data = trim.substring(1)
-        return [JSON.parse(json_data), true]
+        return [registry[trim == "{" ? "Introspection" : "Retrospection"], false, trim == "{" ? 1 : -1]
+    } else if (trim.match(/<([^\s>]+)>/)) {
+        return [parseIotaMethod(trim, depth), false, 0]
     }
 }
 
@@ -79,7 +130,6 @@ function parseHexpatternFile(hexpatternFilePath) {
         const macroName = match[1];
         const startDir = match[2];
         const patternName = match[3];
-        const patternContent = match[4];
         macroReg[macroName] = {
             angles: patternName,
             startDir: startDir
@@ -88,17 +138,23 @@ function parseHexpatternFile(hexpatternFilePath) {
 
     const content = lines.split('\n')
     var output = []
+    var depth = 0
     for (let i = 0; i < content.length; i++) {
-        var ret = getPatternFromName(content[i])
-        if (ret == undefined) { continue }
+        var ret = getPatternFromName(content[i], depth)
+        if (ret == undefined) { console.warn("Failed to parse pattern: " + content[i]); continue }
         if (!ret[1]) {
             if (Array.isArray(ret[0])) {
-                ret[0] = ret[0].flat(Infinity)
+                ret[0] = ret[0].flat(1)
+                output = output.concat(ret[0])
+            } else {
+                output.push(ret[0])
             }
-            output.push(ret[0])
         } else {
             output.push(ret[0])
         }
+        console.log(depth)
+        depth += ret[2] ?? 0
+
     }
     return output
 }
