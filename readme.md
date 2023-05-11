@@ -25,3 +25,4 @@ current types that can be parsed<br>
 * Strings ("quoted strings")
 * Booleans (`true`/`false` (case sensitive))
 * Vector3 (`(x,y,z)` format)
+* list of iotas [iota,iota2,iota3]

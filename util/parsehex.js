@@ -179,8 +179,8 @@ function parseHexpatternFile(hexpatternFilePath) {
     var depth = 0
     for (let i = 0; i < content.length; i++) {
         if (content[i].trim() === "") { continue }
-        var ret = getPatternFromName(content[i], depth)
         if (content[i].match(macroRegex)) { continue }
+        var ret = getPatternFromName(content[i], depth)
         if (ret == undefined) { console.warn("Failed to parse pattern: " + content[i]); continue }
         if (!ret[1]) {
             if (Array.isArray(ret[0])) {
