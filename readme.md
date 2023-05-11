@@ -20,9 +20,12 @@ notes about hexpattern format<br>
 * `<<Iota>>`: embed with intro or considerations, whichever is shorter<br>
 
 currently you can use json for iotas thatdont have a pre-handled parser<br>
+types with # are json and not a shorthand
 current types that can be parsed<br>
-* Numbers (decimal and not)
-* Strings ("quoted strings")
-* Booleans (`true`/`false` (case sensitive))
-* Vector3 (`(x,y,z)` format)
+* #Numbers (decimal and not)
+* #Strings ("quoted strings")
+* #Booleans (`true`/`false` (case sensitive))
+* Vector3 (`(x,y,z)` format, could use json {"x":0,"y":0,"z":0} format also if you wish)
 * list of iotas [iota,iota2,iota3]
+* Null (undefined (json), or null (not case sensitive))
+* Garbage ({"garbage":true} (json), or garbage (not case sensitive))

@@ -62,6 +62,13 @@ function parseIotaData(iota) {
         } else if (iota.match(/(-?[1234567890\.]+),(-?[1234567890\.]+),(-?[1234567890\.]+)/)) { //vector constant
             match = iota.match(/(-?[1234567890\.]+),(-?[1234567890\.]+),(-?[1234567890\.]+)/)
             return { x: parseFloat(match[1]), y: parseFloat(match[2]), z: parseFloat(match[3]) }
+        } else if (iotatoLowerCase() == "garbage") {
+            return { "garbage": true }
+        } else if (iota.toLowerCase() == "null") {
+            return undefined
+        } else {
+            console.log("Invalid Iota, returning garbage: " + iota)
+            return { "garbage": true }
         }
     }
 }
