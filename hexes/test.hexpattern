@@ -1,13 +1,11 @@
-<{12}>
-Iterators Purification
+<{1}>
 Reveal
-{
-    Consideration: Reveal 
-    Reveal
-}
-<(1,2,3)>
-<<(1,2,3)>>
-<\1>
+<2>
 Reveal
-Hermes' Gambit
+<<3>>
+Reveal
+<\4>
+Reveal
+<{[1,2,[3,4,5]]}>
+Reveal
 

@@ -11,11 +11,55 @@ const whiteSpace = /^[\s]+/
 
 const macroReg = {}
 
+//trash code be warned
+function parseList(str) {
+    var d = 0
+    var output = []
+    var buf = ""
+    var skip = false
+    for (let i = 0; i < str.length; i++) {
+        const char = str[i];
+        if (char == "[") {
+            d += 1
+            if (d == 1) {
+                skip = true
+            }
+        } else if (char == "]") {
+            d -= 1
+        }
+        if (char == "(" || char == "{") {
+            d += 1
+        } else if (char == ")" || char == "}") {
+            d -= 1
+        }
+        if (d == 1) {
+            if (char == ",") {
+                output.push(buf)
+                buf = ""
+            } else {
+                if (!skip) {
+                    buf += char
+                }
+            }
+        } else {
+            if (!(skip || (char == "]" && i + 1 == str.length))) {
+                buf += char
+            }
+        }
+        skip = false
+    }
+    output.push(buf)
+    return output
+}
+
 function parseIotaData(iota) {
     try {
-        return JSON.parse(iota)
+        var iotav = JSON.parse(iota)
+        return iotav
     } catch (SyntaxError) {
-        if (iota.match(/([1234567890\.]+),([1234567890\.]+),([1234567890\.]+)/)) { //vector constant
+        if (/^\[.*\]$/.test(iota)) {
+            return [parseList(iota).map(i => parseIotaData(i))]
+        } else if (iota.match(/([1234567890\.]+),([1234567890\.]+),([1234567890\.]+)/)) { //vector constant
             match = iota.match(/([1234567890\.]+),([1234567890\.]+),([1234567890\.]+)/)
             return { x: parseFloat(match[1]), y: parseFloat(match[2]), z: parseFloat(match[3]) }
         }
@@ -24,7 +68,7 @@ function parseIotaData(iota) {
 
 function parseIotaMethod(iota, depth) {
     if (iota.match(/<<([^>]+)>>/)) {
-        const iotad = iota.match(/<([^\s>]+)>/)[1]
+        const iotad = iota.match(/<<([^>]+)>>/)[1]
         if (depth >= 2) {//consideration is *bad*
             return [
                 registry["Introspection"],
@@ -62,13 +106,14 @@ function parseIotaMethod(iota, depth) {
 function getPatternFromName(line, depth) {
     trim = line.trim()
     if (trim in registry) { //normal line...
-        return [registry[trim], false]
+        dchange = trim == "Introspection" ? 1 : 0
+        dchange += trim == "Retrospection" ? -1 : 0
+        return [registry[trim], false, dchange]
     } else if (trim in macroReg) { //macro line
-        return [macroReg[trim], false]
-    } else if (trim.startsWith("Consideration: ")) {
-        var gpfn = getPatternFromName(trim.replace(/^Consideration: /, ''), depth)
-        return [[registry["Consideration"], resultArr], false, 0]
-    } else if (trim.startsWith("Numerical Reflection: ")) {
+        return [macroReg[trim], false, 0]
+    } else if (trim.startsWith("Consideration: ")) { // Consider the following
+        return getPatternFromName(trim.replace(/^Consideration: /, ''), depth)
+    } else if (trim.startsWith("Numerical Reflection: ")) { // Numbers are a pain so we just Iota embed them
         let num = trim.replace(/^Numerical Reflection: /, '')
         return [[
             registry["Introspection"],
@@ -76,7 +121,7 @@ function getPatternFromName(line, depth) {
             registry["Retrospection"],
             registry["Flock's Disintegration"]
         ], false, 0]
-    } else if (trim.startsWith("Bookkeeper's Gambit: ")) {
+    } else if (trim.startsWith("Bookkeeper's Gambit: ")) { // bookkeepers is easy enough to generate
         const mask = trim.replace(/^Bookkeeper's Gambit: /, '')
         var direction, pattern
         if (mask[0] == "v") {
@@ -107,9 +152,9 @@ function getPatternFromName(line, depth) {
         }
 
         return [{ startDir: direction, angles: pattern }, false]
-    } else if (trim == "{" || trim == "}") {
+    } else if (trim == "{" || trim == "}") { //Intro/Retro shorthands
         return [registry[trim == "{" ? "Introspection" : "Retrospection"], false, trim == "{" ? 1 : -1]
-    } else if (trim.match(/<([^\s>]+)>/)) {
+    } else if (trim.match(/<([^\s>]+)>/)) { //Iota handler
         return [parseIotaMethod(trim, depth), false, 0]
     }
 }
@@ -138,7 +183,6 @@ function parseHexpatternFile(hexpatternFilePath) {
         if (ret == undefined) { console.warn("Failed to parse pattern: " + content[i]); continue }
         if (!ret[1]) {
             if (Array.isArray(ret[0])) {
-                ret[0] = ret[0].flat(1)
                 output = output.concat(ret[0])
             } else {
                 output.push(ret[0])
