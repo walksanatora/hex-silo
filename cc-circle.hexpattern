@@ -4,7 +4,7 @@
 Flock's Reflection // turn the stack into a single iota
 Flock's Gambit     // ...
 Waystone Reflection  // replace with focal port offset
-Vector Reflection -Z //
+<{(0,0,-1)}>
 Additive Distillation//
 Entity Purification// turn location into entity (hopefully the focal port)
 Jester's Gambit
