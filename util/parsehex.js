@@ -63,7 +63,9 @@ function parseIotaData(iota) {
             match = iota.match(/(-?[1234567890\.]+),(-?[1234567890\.]+),(-?[1234567890\.]+)/)
             return { x: parseFloat(match[1]), y: parseFloat(match[2]), z: parseFloat(match[3]) }
         } else if (iota.toLowerCase() == "garbage") {
-            return { "garbage": true }
+            return {
+                "totally_valid": { "garbage": true }
+            }
         } else if (iota.toLowerCase() == "null") {
             return undefined
         } else {
