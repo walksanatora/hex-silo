@@ -20,7 +20,7 @@ notes about hexpattern format<br>
 * `<<Iota>>`: embed with intro or considerations, whichever is shorter<br>
 
 currently you can use json for iotas thatdont have a pre-handled parser<br>
-types with # are json and not a shorthand
+types with # are json and do not have a shorthand
 current types that can be parsed<br>
 * #Numbers (decimal and not)
 * #Strings ("quoted strings")
