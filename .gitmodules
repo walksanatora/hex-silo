@@ -1,0 +1,3 @@
+[submodule "lua/PrimeUI"]
+	path = lua/PrimeUI
+	url = https://github.com/MCJack123/PrimeUI
