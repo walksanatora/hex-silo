@@ -1,14 +1,26 @@
 --main lua program for controlling execution
 
 --hard coded things
-local read = "front"
-local write = "top"
-local append = textutils.unserializeJSON(
-    '[{"angles":"qwaeawqaeaqa","startDir":"NORTH_WEST"},{"angles":"ewdqdwe","startDir":"SOUTH_WEST"},{"angles":"eaqwqae","startDir":"SOUTH_WEST"},{"angles":"eeeeeqd","startDir":"SOUTH_WEST"},{"angles":"waaw","startDir":"NORTH_EAST"},{"angles":"qqqqqdaqa","startDir":"SOUTH_EAST"},{"angles":"aawdd","startDir":"EAST"},{"angles":"wdwewewewewew","startDir":"EAST"}]'
-)
+local js = [==[
+    [
+  { angles: 'qwaeawqaeaqa', startDir: 'NORTH_WEST' },
+  { angles: 'ewdqdwe', startDir: 'SOUTH_WEST' },
+  { angles: 'eaqwqae', startDir: 'SOUTH_WEST' },
+  { angles: 'qqqqqed', startDir: 'NORTH_WEST' },
+  { angles: 'qqqqqed', startDir: 'NORTH_WEST' },
+  { angles: 'waaw', startDir: 'NORTH_EAST' },
+  { angles: 'waaw', startDir: 'NORTH_EAST' },
+  { angles: 'qqqqqdaqa', startDir: 'SOUTH_EAST' },
+  { angles: 'wdwewewewewew', startDir: 'EAST' }
+]
+]==]
+local append = textutils.unserializeJSON(js)
 
+textutils.pagedPrint(js)
+textutils.pagedPrint(textutils.serialise(append))
 
 local fp = peripheral.find("focal_port")
+local imp = peripheral.find("cleric_impetus")
 local completion = require "cc.shell.completion"
 
 shell.setCompletionFunction(shell.getRunningProgram(), completion.build(
@@ -48,20 +60,15 @@ local function executeHex(hex, get_output)
     end
 
     fp.writeIota(code)
-    print("start circle")
-    redstone.setOutput(write, true)
-    sleep(1)
-    redstone.setOutput(write, false)
-    print("await completion")
-    while redstone.getInput(read) do sleep(.1) end
+    imp.activateCircle()
+    local ev, mishap, periph = os.pullEvent("circle_stopped")
     return fp.readIota()
 end
 
 local file = ...
 if file == nil then error("Argument expected: file path") end
 
-term.clear()
-term.setCursorPos(1, 1)
+
 textutils.pagedPrint(
     textutils.serialise(
         executeHex(file, true)

@@ -27,5 +27,5 @@ current types that can be parsed<br>
 * #Booleans (`true`/`false` (case sensitive))
 * Vector3 (`(x,y,z)` format, could use json {"x":0,"y":0,"z":0} format also if you wish)
 * list of iotas [iota,iota2,iota3]
-* Null (undefined (json), or null (not case sensitive))
+* Null (null or {"null":true})
 * Garbage ({"garbage":true} (json), or garbage (not case sensitive))

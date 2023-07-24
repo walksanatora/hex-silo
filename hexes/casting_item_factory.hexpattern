@@ -1,0 +1,52 @@
+////patterns for the actual slates
+//Waystone Reflection
+//Vector Reflection -Y
+//Additive Distillation
+//Consideration         //
+//Hermes' Gambit        //
+//Akasha's Distillation //access the hermes gambit key in the akashic record
+//Hermes' Gambit        //
+Lesser Fold Reflection
+Entity Purification
+Chronicler's Purification
+Hermes' Gambit
+
+//patterns for the akashic record underneath the impetus
+Greater Fold Reflection     //
+Lesser Fold Reflection      //
+Additive Distillation       // get center of the circle
+Numerical Reflection: 2     //
+Division Distillation       //
+Entity Purification: Item     //I assume you are meant to put amethyst at the center of the circle
+Greater Fold Reflection     //
+Entity Purification         //fetch pattern list from item frame
+Chronicler's Purification   //
+//Select crafting pattern
+{
+    <Cypher itemtype>
+    Craft Cypher
+    <Trinket itemtype>
+    Craft Trinket
+    <Artifact itemtype>
+    Craft Artifact
+    <Glass Bottle itemtype>
+    <[Bookkeeper's Gambit: v, Craft Phial]>
+}
+Gemini Decomposition    //duplicate the crafting list
+Sorter's Reflection     //get offhand
+Locator's Distillation  //find index of itemtype in the crafting list
+Numerical Reflection: 1   //
+Additive Distillation     //
+Selection Distillation    //add 1 to the index of the itemtype and get it
+Mind's Reflection           //
+Stadiometer's Purification  //  erase if sneaking
+Numerical Reflection: 1.5   //
+Maximus Distillation        //
+{
+    Bookkeeper's Gambit: -
+    Erase Item
+}
+Flock's Disintegration // push bookkeepers + erase item to the top of the stack
+Augur's Exaltation //pick erase item or bookkeepers to keep
+Hermes' Gambit // either erase item or do nothing
+Hermes' Gambit // execute the crafting pattern

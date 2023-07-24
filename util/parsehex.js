@@ -52,7 +52,7 @@ function parseList(str) {
     return output
 }
 
-function parseIotaData(iota) {
+function parseIotaData(iota, d) {
     try {
         var iotav = JSON.parse(iota)
         return iotav
@@ -63,52 +63,55 @@ function parseIotaData(iota) {
             match = iota.match(/(-?[1234567890\.]+),(-?[1234567890\.]+),(-?[1234567890\.]+)/)
             return { x: parseFloat(match[1]), y: parseFloat(match[2]), z: parseFloat(match[3]) }
         } else if (iota.toLowerCase() == "garbage") {
-            return {
-                "totally_valid": { "garbage": true }
-            }
+            return { "garbage": true }
         } else if (iota.toLowerCase() == "null") {
             return undefined
         } else {
-            console.log("Invalid Iota, returning garbage: " + iota)
-            return { "garbage": true }
+            const triedPatternName = getPatternFromName(iota, d)
+            if (triedPatternName != undefined) {
+                return triedPatternName[0]
+            } else {
+                console.log("Invalid Iota, returning garbage: " + iota)
+                return { "garbage": true }
+            }
         }
     }
 }
 
 function parseIotaMethod(iota, depth) {
-    if (iota.match(/<<([^>]+)>>/)) {
+    if (iota.match(/<<([^>]+)>>/)) { //whichever is best option
         const iotad = iota.match(/<<([^>]+)>>/)[1]
         if (depth >= 2) {//consideration is *bad*
             return [
                 registry["Introspection"],
                 parseIotaData(iotad),
                 registry["Retrospection"],
-                registry["Flock's Gambit"],
+                registry["Flock's Disintegration"],
             ]
         } else {
             const repeatedArr = Array(2 ** depth).fill(registry["Consideration"]);
             const resultArr = [
                 ...repeatedArr,
-                parseIotaData(iotad)
+                parseIotaData(iotad, depth)
             ]
             return resultArr
         }
-    } else if (iota.match(/<{([^>]+?)}>/)) {
+    } else if (iota.match(/<\{([^>]+?)\}>/)) { //intro/retro/flock
         return [
             registry["Introspection"],
-            parseIotaData(iota.match(/<{([^>]+?)}>/)[1]),
+            parseIotaData(iota.match(/<\{([^>]+?)\}>/)[1]),
             registry["Retrospection"],
-            registry["Flock's Gambit"],
+            registry["Flock's Disintegration"],
         ]
-    } else if (iota.match(/<\\([^>]+)>/)) {
+    } else if (iota.match(/<\\([^>]+)>/)) { //consider
         const repeatedArr = Array(2 ** depth).fill(registry["Consideration"]);
         const resultArr = [
             ...repeatedArr,
             parseIotaData(iota.match(/<\\([^>]+)>/)[1])
         ]
         return resultArr
-    } else {
-        return [parseIotaData(iota.match(/<([^>]+)>/)[1])]
+    } else { //any
+        return [parseIotaData(iota.match(/<([^>]+)>/)[1], depth)]
     }
 }
 
@@ -163,7 +166,7 @@ function getPatternFromName(line, depth) {
         return [{ startDir: direction, angles: pattern }, false]
     } else if (trim == "{" || trim == "}") { //Intro/Retro shorthands
         return [registry[trim == "{" ? "Introspection" : "Retrospection"], false, trim == "{" ? 1 : -1]
-    } else if (trim.match(/<([^\s>]+)>/)) { //Iota handler
+    } else if (trim.match(/<([^>]+)>/)) { //Iota handler
         return [parseIotaMethod(trim, depth), false, 0]
     }
 }

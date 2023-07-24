@@ -1,9 +1,8 @@
 // a really contrived test case
 #define Print (NORTH_EAST de) = any ->
 
-<{[1,"string",null,garbage,true,(0,1,0)]}> // a comment on a iota
+<{[1,"string",null,garbage,true,(0,1,0),Reveal]}> // a comment on a iota
 Print // A comment on a macro
 Numerical Reflection: 1 // a comment on a pattern
 Selection Distillation
 Reveal
-
